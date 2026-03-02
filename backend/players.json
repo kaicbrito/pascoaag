@@ -1,0 +1,22 @@
+[
+  { "nome": "Ana",      "sobrenome": "Silva",    "team_id": 1,  "team_color": "AZUL",     "puzzle_piece": 1, "puzzle_number": 7  },
+  { "nome": "Bruno",    "sobrenome": "Costa",    "team_id": 1,  "team_color": "AZUL",     "puzzle_piece": 2, "puzzle_number": 3  },
+  { "nome": "Carla",    "sobrenome": "Lima",     "team_id": 1,  "team_color": "AZUL",     "puzzle_piece": 3, "puzzle_number": 9  },
+  { "nome": "Diego",    "sobrenome": "Souza",    "team_id": 1,  "team_color": "AZUL",     "puzzle_piece": 4, "puzzle_number": 5  },
+  { "nome": "Elaine",   "sobrenome": "Rocha",    "team_id": 1,  "team_color": "AZUL",     "puzzle_piece": 5, "puzzle_number": 2  },
+  { "nome": "Felipe",   "sobrenome": "Mendes",   "team_id": 1,  "team_color": "AZUL",     "puzzle_piece": 6, "puzzle_number": 8  },
+
+  { "nome": "Gabriela", "sobrenome": "Santos",   "team_id": 2,  "team_color": "ROSA",     "puzzle_piece": 1, "puzzle_number": 4  },
+  { "nome": "Henrique", "sobrenome": "Alves",    "team_id": 2,  "team_color": "ROSA",     "puzzle_piece": 2, "puzzle_number": 6  },
+  { "nome": "Isabela",  "sobrenome": "Ferreira", "team_id": 2,  "team_color": "ROSA",     "puzzle_piece": 3, "puzzle_number": 1  },
+  { "nome": "João",     "sobrenome": "Oliveira", "team_id": 2,  "team_color": "ROSA",     "puzzle_piece": 4, "puzzle_number": 10 },
+  { "nome": "Karina",   "sobrenome": "Pereira",  "team_id": 2,  "team_color": "ROSA",     "puzzle_piece": 5, "puzzle_number": 12 },
+  { "nome": "Lucas",    "sobrenome": "Martins",  "team_id": 2,  "team_color": "ROSA",     "puzzle_piece": 6, "puzzle_number": 11 },
+
+  { "nome": "Mariana",  "sobrenome": "Gomes",    "team_id": 3,  "team_color": "VERDE",    "puzzle_piece": 1, "puzzle_number": 15 },
+  { "nome": "Nicolas",  "sobrenome": "Barbosa",  "team_id": 3,  "team_color": "VERDE",    "puzzle_piece": 2, "puzzle_number": 13 },
+  { "nome": "Olivia",   "sobrenome": "Carvalho", "team_id": 3,  "team_color": "VERDE",    "puzzle_piece": 3, "puzzle_number": 16 },
+  { "nome": "Pedro",    "sobrenome": "Ribeiro",  "team_id": 3,  "team_color": "VERDE",    "puzzle_piece": 4, "puzzle_number": 14 },
+  { "nome": "Quintina", "sobrenome": "Nunes",    "team_id": 3,  "team_color": "VERDE",    "puzzle_piece": 5, "puzzle_number": 17 },
+  { "nome": "Rafael",   "sobrenome": "Pinto",    "team_id": 3,  "team_color": "VERDE",    "puzzle_piece": 6, "puzzle_number": 18 }
+]
