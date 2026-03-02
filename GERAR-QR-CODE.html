@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <title>Gerar QR Code — CaçaPáscoa</title>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+  <style>
+    body { font-family: sans-serif; background: #FFF7E8; display:flex; flex-direction:column; align-items:center; justify-content:center; min-height:100vh; padding:20px; }
+    h1 { color: #FF6B9E; font-size: 28px; margin-bottom: 8px; }
+    p { color: #6B7280; margin-bottom: 20px; text-align:center; }
+    input { border: 3px solid #FFB020; border-radius: 14px; padding: 12px 20px; font-size: 18px; width: 320px; margin-bottom: 14px; text-align:center; outline:none; }
+    button { background: linear-gradient(135deg,#FF6B9E,#FF8FB1); color:white; border:none; border-radius:14px; padding:14px 32px; font-size:18px; font-weight:700; cursor:pointer; }
+    #qr { margin-top: 28px; padding: 20px; background: white; border-radius: 20px; box-shadow: 0 4px 20px rgba(0,0,0,.1); }
+    #url-display { margin-top: 12px; color: #7C4DFF; font-weight: 700; font-size: 16px; }
+    .tip { background: #EFF6FF; border: 2px solid #BFDBFE; border-radius: 12px; padding: 12px 20px; margin-top: 20px; color: #1D4ED8; font-size: 14px; max-width: 400px; }
+  </style>
+</head>
+<body>
+  <h1>🐰 Gerar QR Code</h1>
+  <p>Digite o IP do seu computador para gerar o QR Code que os participantes vão escanear</p>
+  
+  <input type="text" id="ip-input" placeholder="Ex: 192.168.1.10" value="" />
+  <br>
+  <button onclick="gerarQR()">📱 Gerar QR Code</button>
+
+  <div id="qr"></div>
+  <div id="url-display"></div>
+
+  <div class="tip">
+    💡 <strong>Como saber meu IP?</strong><br>
+    Windows: Abra o CMD e digite <code>ipconfig</code> → procure "Endereço IPv4"<br>
+    Mac/Linux: Abra o Terminal e digite <code>ifconfig</code> → procure "inet"
+  </div>
+
+  <script>
+    let qrcode = null;
+    function gerarQR() {
+      const ip = document.getElementById("ip-input").value.trim();
+      if (!ip) { alert("Digite o IP primeiro!"); return; }
+      const url = `http://${ip}:3000`;
+      
+      document.getElementById("qr").innerHTML = "";
+      document.getElementById("url-display").textContent = url;
+      
+      qrcode = new QRCode(document.getElementById("qr"), {
+        text: url,
+        width: 256,
+        height: 256,
+        colorDark: "#FF6B9E",
+        colorLight: "#ffffff",
+        correctLevel: QRCode.CorrectLevel.M,
+      });
+    }
+
+    // Auto-detecta IP se possível
+    window.onload = () => {
+      const host = location.hostname;
+      if (host && host !== "localhost" && host !== "127.0.0.1") {
+        document.getElementById("ip-input").value = host;
+        gerarQR();
+      }
+    };
+  </script>
+</body>
+</html>
