@@ -1,0 +1,774 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <title>CaçaPáscoa 🐰</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&family=Fredoka+One&display=swap" rel="stylesheet" />
+  <style>
+    /* ── Reset & Base ── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html, body { height: 100%; font-family: 'Nunito', sans-serif; background: #FFF7E8; color: #1F2937; -webkit-font-smoothing: antialiased; }
+    #app { min-height: 100vh; }
+    .fredoka { font-family: 'Fredoka One', cursive; }
+
+    /* ── Animations ── */
+    @keyframes float { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-12px)} }
+    @keyframes bounce-in { 0%{transform:scale(0.3);opacity:0} 50%{transform:scale(1.07)} 70%{transform:scale(0.95)} 100%{transform:scale(1);opacity:1} }
+    @keyframes shake { 0%,100%{transform:translateX(0)} 20%{transform:translateX(-8px)} 40%{transform:translateX(8px)} 60%{transform:translateX(-8px)} 80%{transform:translateX(8px)} }
+    @keyframes confetti-fall { 0%{transform:translateY(-100vh) rotate(0deg);opacity:1} 100%{transform:translateY(110vh) rotate(720deg);opacity:0} }
+    @keyframes sparkle { 0%,100%{opacity:0;transform:scale(0)} 50%{opacity:1;transform:scale(1)} }
+    @keyframes pulse-glow { 0%,100%{box-shadow:0 0 20px rgba(255,107,158,.4)} 50%{box-shadow:0 0 45px rgba(255,107,158,.9)} }
+    @keyframes slide-up { from{transform:translateY(28px);opacity:0} to{transform:translateY(0);opacity:1} }
+    @keyframes spin { from{transform:rotate(0deg)} to{transform:rotate(360deg)} }
+    @keyframes fade-in { from{opacity:0} to{opacity:1} }
+
+    .float { animation: float 3s ease-in-out infinite; }
+    .bounce-in { animation: bounce-in 0.5s cubic-bezier(0.68,-0.55,0.265,1.55) forwards; }
+    .shake { animation: shake 0.4s ease-in-out; }
+    .slide-up { animation: slide-up 0.4s ease-out forwards; }
+    .fade-in { animation: fade-in 0.4s ease forwards; }
+    .pulse-glow { animation: pulse-glow 2s ease-in-out infinite; }
+
+    /* ── Layout ── */
+    .screen { min-height: 100vh; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 24px 20px; position: relative; overflow: hidden; }
+    .container { width: 100%; max-width: 420px; }
+
+    /* ── Cards ── */
+    .card { background: #fff; border-radius: 24px; padding: 28px; box-shadow: 0 8px 32px rgba(0,0,0,.08); border: 2px solid rgba(255,107,158,.1); }
+    .card-accent { border: 3px solid #FFB020; }
+    .card-success { border: 3px solid #22C55E; background: #F0FDF4; }
+    .card-error { border: 3px solid #EF4444; background: #FEF2F2; }
+    .card-dashed { border: 3px dashed #FFB020; background: #FFFBEB; }
+
+    /* ── Buttons ── */
+    .btn { border: none; border-radius: 20px; padding: 16px 28px; font-size: 18px; font-weight: 800; font-family: 'Nunito', sans-serif; cursor: pointer; transition: all .2s; width: 100%; display: block; }
+    .btn:active { transform: scale(.97); }
+    .btn-primary { background: linear-gradient(135deg,#FF6B9E,#FF8FB1); color: #fff; box-shadow: 0 4px 15px rgba(255,107,158,.4); }
+    .btn-primary:hover { transform: translateY(-2px) scale(1.02); box-shadow: 0 8px 25px rgba(255,107,158,.55); }
+    .btn-secondary { background: linear-gradient(135deg,#7C4DFF,#9D72FF); color: #fff; box-shadow: 0 4px 15px rgba(124,77,255,.4); }
+    .btn-secondary:hover { transform: translateY(-2px); }
+    .btn-danger { background: #EF4444; color: #fff; }
+    .btn-option { background: #fff; border: 3px solid #FFB020; border-radius: 18px; padding: 16px 18px; font-size: 16px; font-weight: 700; font-family: 'Nunito',sans-serif; cursor: pointer; text-align: left; color: #1F2937; width: 100%; margin-bottom: 12px; display: flex; align-items: center; gap: 10px; transition: all .2s; }
+    .btn-option:hover:not(:disabled) { background: #FFF7E8; transform: translateX(4px); border-color: #FF6B9E; }
+    .btn-option:disabled { cursor: default; }
+    .btn-option.correct { background: #F0FDF4; border-color: #22C55E; color: #16A34A; animation: bounce-in .4s; }
+    .btn-option.wrong { background: #FEF2F2; border-color: #EF4444; color: #DC2626; }
+    .btn-option .opt-letter { width: 30px; height: 30px; border-radius: 50%; background: #FFF7E8; display: flex; align-items: center; justify-content: center; font-weight: 900; font-size: 13px; color: #FFB020; flex-shrink: 0; }
+    .btn-option.correct .opt-letter { background: #DCFCE7; color: #16A34A; }
+    .btn-option.wrong .opt-letter { background: #FEE2E2; color: #DC2626; }
+
+    /* ── Inputs ── */
+    .input { width: 100%; border: 3px solid #FFB020; border-radius: 18px; padding: 16px 20px; font-size: 18px; font-weight: 700; font-family: 'Nunito',sans-serif; color: #1F2937; background: #fff; outline: none; transition: all .2s; }
+    .input:focus { border-color: #FF6B9E; box-shadow: 0 0 0 4px rgba(255,107,158,.15); }
+    .input-center { text-align: center; letter-spacing: 3px; text-transform: uppercase; font-size: 22px; }
+    label { display: block; font-weight: 700; color: #374151; margin-bottom: 8px; font-size: 15px; }
+
+    /* ── Progress ── */
+    .progress-bar { height: 10px; background: #FFE4B5; border-radius: 5px; overflow: hidden; }
+    .progress-fill { height: 100%; background: linear-gradient(90deg,#FF6B9E,#FFB020); border-radius: 5px; transition: width .6s ease; }
+
+    /* ── Tags & Badges ── */
+    .tag { display: inline-block; padding: 4px 12px; border-radius: 20px; font-size: 13px; font-weight: 700; }
+    .team-badge { display: inline-flex; align-items: center; gap: 6px; padding: 6px 14px; border-radius: 20px; font-weight: 800; font-size: 14px; color: #fff; }
+
+    /* ── Decorative ── */
+    .bg-dots { background-image: radial-gradient(circle,#FFB020 1px,transparent 1px); background-size: 28px 28px; opacity: .12; position: absolute; inset: 0; pointer-events: none; }
+    .sparkle { position: absolute; animation: sparkle 1.8s ease-in-out infinite; pointer-events: none; font-size: 22px; }
+    .confetti-piece { position: fixed; width: 10px; height: 10px; top: -20px; animation: confetti-fall linear forwards; border-radius: 2px; z-index: 9999; pointer-events: none; }
+
+    /* ── Alerts ── */
+    .alert { border-radius: 14px; padding: 12px 16px; font-weight: 600; font-size: 15px; margin-top: 14px; }
+    .alert-error { background: #FEF2F2; border: 2px solid #FCA5A5; color: #DC2626; }
+    .alert-success { background: #F0FDF4; border: 2px solid #86EFAC; color: #16A34A; }
+    .alert-warning { background: #FFFBEB; border: 2px solid #FDE68A; color: #92400E; }
+    .alert-info { background: #EFF6FF; border: 2px solid #BFDBFE; color: #1D4ED8; }
+
+    /* ── Chat bubble ── */
+    .bubble { background: #fff; border: 2px solid #FFB020; border-radius: 16px; padding: 10px 16px; font-size: 14px; font-weight: 600; color: #1F2937; max-width: 220px; margin: 10px auto 0; position: relative; text-align: center; }
+    .bubble::before { content:''; position:absolute; top:-10px; left:50%; transform:translateX(-50%); width:0; height:0; border-left:8px solid transparent; border-right:8px solid transparent; border-bottom:10px solid #FFB020; }
+
+    /* ── Admin ── */
+    .admin-screen { min-height: 100vh; background: #111827; padding: 20px; }
+    .admin-card { background: #1F2937; border-radius: 16px; padding: 16px 20px; margin-bottom: 10px; display: flex; align-items: center; gap: 14px; border: 2px solid transparent; }
+    .admin-avatar { width: 44px; height: 44px; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: #fff; font-weight: 900; font-size: 18px; flex-shrink: 0; }
+    .stat-card { background: #1F2937; border-radius: 16px; padding: 16px; text-align: center; }
+
+    /* ── Misc ── */
+    .mt-4 { margin-top: 16px; }
+    .mt-6 { margin-top: 24px; }
+    .mt-3 { margin-top: 12px; }
+    .mb-4 { margin-bottom: 16px; }
+    .mb-2 { margin-bottom: 8px; }
+    .text-center { text-align: center; }
+    .text-muted { color: #9CA3AF; font-size: 13px; font-weight: 600; }
+    .divider { height: 1px; background: #F3F4F6; margin: 20px 0; }
+    .row { display: flex; gap: 12px; }
+    .row > * { flex: 1; }
+    .hidden { display: none !important; }
+    .loading { text-align: center; padding: 40px; color: #9CA3AF; font-size: 18px; }
+  </style>
+</head>
+<body>
+<div id="app">
+  <div class="loading">🐰 Carregando CaçaPáscoa...</div>
+</div>
+
+<script>
+// ════════════════════════════════════════════════════════════
+// CaçaPáscoa — Frontend (Vanilla JS, sem dependências)
+// ════════════════════════════════════════════════════════════
+
+// ── Config ──────────────────────────────────────────────────
+const API = ""; // vazio = mesmo servidor
+const TEAM_COLORS = {
+  "AZUL":     { bg: "#3B82F6", light: "#EFF6FF", emoji: "💙" },
+  "ROSA":     { bg: "#EC4899", light: "#FDF2F8", emoji: "🩷" },
+  "VERDE":    { bg: "#22C55E", light: "#F0FDF4", emoji: "💚" },
+  "AMARELO":  { bg: "#EAB308", light: "#FEFCE8", emoji: "💛" },
+  "ROXO":     { bg: "#7C4DFF", light: "#EDE9FE", emoji: "💜" },
+  "LARANJA":  { bg: "#F97316", light: "#FFF7ED", emoji: "🧡" },
+  "VERMELHO": { bg: "#EF4444", light: "#FEF2F2", emoji: "❤️" },
+  "TURQUESA": { bg: "#06B6D4", light: "#ECFEFF", emoji: "🩵" },
+  "DOURADO":  { bg: "#D97706", light: "#FFFBEB", emoji: "🌟" },
+  "PRATA":    { bg: "#6B7280", light: "#F9FAFB", emoji: "🩶" },
+  "BRONZE":   { bg: "#92400E", light: "#FFF7ED", emoji: "🤎" },
+};
+const STAGE_ICONS = { 1: "🥚", 2: "🗺️", 3: "⭐" };
+const STAGE_COLORS = { 1: "#FF6B9E", 2: "#7C4DFF", 3: "#FFB020" };
+const CONFETTI_COLORS = ["#FF6B9E","#7C4DFF","#FFB020","#22C55E","#38BDF8","#FB923C"];
+
+// ── State ────────────────────────────────────────────────────
+let state = {
+  screen: "start",     // start | login | quiz | team | final | admin
+  player: null,        // objeto do jogador atual
+  quizStage: 1,
+  questions: [],
+  currentQIndex: 0,
+  selectedAnswer: null,
+  showHint: false,
+  hintText: "",
+  adminPlayers: [],
+  adminShowTeams: false,
+  isLoading: false,
+  wsConnected: false,
+};
+
+// ── WebSocket ────────────────────────────────────────────────
+let ws;
+function connectWS() {
+  const protocol = location.protocol === "https:" ? "wss:" : "ws:";
+  const wsUrl = `${protocol}//${location.host}`;
+  ws = new WebSocket(wsUrl);
+  ws.onopen = () => {
+    state.wsConnected = true;
+    console.log("🔌 WebSocket conectado");
+  };
+  ws.onmessage = (e) => {
+    try {
+      const data = JSON.parse(e.data);
+      if (data.type === "FULL_STATE") {
+        state.adminPlayers = data.players;
+        if (state.screen === "admin") render();
+      } else if (data.type === "PLAYER_UPDATE") {
+        const idx = state.adminPlayers.findIndex(p => p.id === data.player.id);
+        if (idx >= 0) state.adminPlayers[idx] = data.player;
+        else state.adminPlayers.push(data.player);
+        // Atualiza jogador local se for o mesmo
+        if (state.player && state.player.id === data.player.id) {
+          state.player = data.player;
+        }
+        if (state.screen === "admin") render();
+      }
+    } catch(err) {}
+  };
+  ws.onclose = () => {
+    state.wsConnected = false;
+    setTimeout(connectWS, 3000); // reconecta automaticamente
+  };
+}
+
+// ── API Helpers ──────────────────────────────────────────────
+async function api(path, method = "GET", body = null) {
+  const opts = { method, headers: { "Content-Type": "application/json" } };
+  if (body) opts.body = JSON.stringify(body);
+  const res = await fetch(`${API}/api${path}`, opts);
+  return res.json();
+}
+
+// ── Confetti ─────────────────────────────────────────────────
+function launchConfetti() {
+  for (let i = 0; i < 50; i++) {
+    setTimeout(() => {
+      const el = document.createElement("div");
+      el.className = "confetti-piece";
+      el.style.left = Math.random() * 100 + "vw";
+      el.style.background = CONFETTI_COLORS[Math.floor(Math.random() * CONFETTI_COLORS.length)];
+      el.style.animationDuration = (1.5 + Math.random() * 2) + "s";
+      el.style.animationDelay = Math.random() * 0.3 + "s";
+      el.style.width = (8 + Math.random() * 8) + "px";
+      el.style.height = (8 + Math.random() * 8) + "px";
+      el.style.borderRadius = Math.random() > 0.5 ? "50%" : "2px";
+      document.body.appendChild(el);
+      setTimeout(() => el.remove(), 4000);
+    }, i * 40);
+  }
+}
+
+// ── Render Engine ────────────────────────────────────────────
+function render() {
+  const app = document.getElementById("app");
+  switch(state.screen) {
+    case "start":   app.innerHTML = renderStart(); break;
+    case "login":   app.innerHTML = renderLogin(); break;
+    case "quiz":    app.innerHTML = renderQuiz(); break;
+    case "team":    app.innerHTML = renderTeam(); break;
+    case "final":   app.innerHTML = renderFinal(); break;
+    case "admin":   app.innerHTML = renderAdmin(); break;
+    default:        app.innerHTML = renderStart();
+  }
+  attachEvents();
+}
+
+// ── Screen: Start ─────────────────────────────────────────────
+function renderStart() {
+  return `
+  <div class="screen" style="background:linear-gradient(160deg,#FFF7E8 0%,#FFE4F0 100%)">
+    <div class="bg-dots"></div>
+    <span class="sparkle" style="top:10%;left:12%;animation-delay:0s">✨</span>
+    <span class="sparkle" style="top:18%;right:8%;animation-delay:.6s">⭐</span>
+    <span class="sparkle" style="bottom:28%;left:6%;animation-delay:1.1s">🌟</span>
+    <span class="sparkle" style="bottom:16%;right:12%;animation-delay:.3s">✨</span>
+    <div class="container text-center" style="position:relative;z-index:1">
+      <div class="float" style="font-size:96px;line-height:1;margin-bottom:8px">🐰</div>
+      <h1 class="fredoka" style="font-size:52px;color:#FF6B9E;text-shadow:3px 3px 0 rgba(255,107,158,.18);line-height:1">CaçaPáscoa</h1>
+      <div style="font-size:28px;margin-top:-4px">🐣🍫🥚</div>
+      <div class="card mt-6" style="text-align:center">
+        <p style="font-size:18px;color:#6B7280;font-weight:600;line-height:1.7">
+          A Páscoa ficou mais divertida.<br>
+          <span style="color:#FF6B9E;font-weight:800">Vamos jogar?</span> 🎉
+        </p>
+      </div>
+      <button class="btn btn-primary pulse-glow mt-6" id="btn-start" style="font-size:22px;padding:20px 40px;letter-spacing:1px">
+        🐰 Começar a Caça!
+      </button>
+      <p class="text-muted mt-4">3 pistas · equipes · prêmio surpresa 🎁</p>
+      <button class="btn btn-secondary" id="btn-admin-entry" style="margin-top:24px;width:auto;padding:10px 24px;font-size:15px;border-radius:50px">
+        📊 Admin
+      </button>
+    </div>
+  </div>`;
+}
+
+// ── Screen: Login ─────────────────────────────────────────────
+function renderLogin() {
+  return `
+  <div class="screen" style="background:linear-gradient(160deg,#FFF7E8 0%,#EDE9FF 100%)">
+    <div class="container">
+      <div class="text-center mb-4">
+        <div class="float" style="font-size:80px;line-height:1">🐰</div>
+        <div class="bubble">Diz quem é você! 🐣</div>
+        <h2 class="fredoka mt-4" style="font-size:36px;color:#7C4DFF">Quem é você?</h2>
+      </div>
+      <div class="card slide-up" id="login-card">
+        <div class="mb-4">
+          <label for="inp-nome">Seu Primeiro Nome</label>
+          <input class="input" id="inp-nome" placeholder="Ex: Ana, Carlos..." autocomplete="off" autocapitalize="words" />
+        </div>
+        <div class="mb-4">
+          <label for="inp-sob">Sobrenome (senha)</label>
+          <input class="input" id="inp-sob" type="password" placeholder="••••••••" />
+        </div>
+        <div id="login-error" class="hidden"></div>
+        <button class="btn btn-primary" id="btn-login" ${state.isLoading ? "disabled" : ""}>
+          ${state.isLoading ? "⏳ Entrando..." : "Entrar na Caça 🚀"}
+        </button>
+      </div>
+      <p class="text-muted text-center mt-4">💡 Primeiro nome = login · Sobrenome = senha</p>
+    </div>
+  </div>`;
+}
+
+// ── Screen: Quiz ──────────────────────────────────────────────
+function renderQuiz() {
+  const { quizStage, questions, currentQIndex, selectedAnswer, showHint, hintText, player } = state;
+  if (!questions.length) return `<div class="loading">⏳ Carregando perguntas...</div>`;
+
+  const q = questions[currentQIndex];
+  const color = STAGE_COLORS[quizStage];
+  const icon = STAGE_ICONS[quizStage];
+  const progressPct = (quizStage / 3) * 100;
+  const attempts = player ? player[`attempts_stage${quizStage}`] : 0;
+
+  const optLetters = ["A","B","C","D"];
+
+  return `
+  <div class="screen" style="background:linear-gradient(160deg,#FFF7E8 0%,${color}22 100%);align-items:flex-start;padding-top:28px">
+    <div class="container">
+      <!-- Header -->
+      <div style="margin-bottom:20px">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px">
+          <span class="fredoka" style="color:${color};font-size:20px">${icon} Etapa ${quizStage} de 3</span>
+          <span class="text-muted">${attempts} tentativa${attempts !== 1 ? "s" : ""}</span>
+        </div>
+        <div class="progress-bar"><div class="progress-fill" style="width:${progressPct}%"></div></div>
+      </div>
+
+      ${!showHint ? `
+      <!-- Question -->
+      <div class="card slide-up" id="quiz-card">
+        <div class="text-center mb-4">
+          <div style="font-size:64px;margin-bottom:12px">${icon}</div>
+          <h2 class="fredoka" style="font-size:24px;color:#1F2937;line-height:1.35">${q.question}</h2>
+        </div>
+        <div id="options-container">
+          ${[q.option_a, q.option_b, q.option_c, q.option_d].map((opt, i) => {
+            let cls = "btn-option";
+            if (selectedAnswer !== null) {
+              if (i === selectedAnswer && selectedAnswer === (q._correct || -1)) cls += " correct";
+              else if (i === selectedAnswer) cls += " wrong";
+            }
+            return `<button class="${cls}" data-index="${i}" ${selectedAnswer !== null ? "disabled" : ""}>
+              <span class="opt-letter">${optLetters[i]}</span>
+              <span>${opt}</span>
+            </button>`;
+          }).join("")}
+        </div>
+        ${selectedAnswer !== null && selectedAnswer !== (q._correct || -1) ? `
+          <div class="alert alert-error" id="wrong-msg">
+            <strong>Quase!</strong> Vamos tentar outra 😉
+          </div>` : ""}
+      </div>
+
+      <!-- Rabbit guide -->
+      <div class="text-center mt-6">
+        <div style="font-size:52px">🐰</div>
+        <div class="bubble">${selectedAnswer === null ? "Escolha com cuidado! 🤔" : "Aguenta, vai que vai! 💪"}</div>
+      </div>
+      ` : `
+      <!-- Hint revealed -->
+      <div class="card bounce-in text-center" style="border:3px solid ${color}">
+        <div style="font-size:68px">🎉</div>
+        <h2 class="fredoka mt-3" style="font-size:30px;color:#22C55E">Acertou! Incrível!</h2>
+        <p style="color:#6B7280;font-size:16px;margin-top:6px;font-weight:600">Boa! Sua próxima pista está quase lá 🐣</p>
+        <div class="card-dashed mt-6" style="border-radius:16px;padding:20px">
+          <p style="font-size:13px;font-weight:700;color:#92400E;margin-bottom:8px;text-transform:uppercase;letter-spacing:1px">🔍 Sua Pista</p>
+          <p style="font-size:17px;color:#1F2937;font-weight:700;line-height:1.55">${hintText}</p>
+        </div>
+        <button class="btn btn-primary mt-6" id="btn-next-stage">
+          ${quizStage < 3 ? `Ir para a pista ${quizStage + 1} 🗺️` : "Ver minha equipe! 👥"}
+        </button>
+      </div>
+      `}
+    </div>
+  </div>`;
+}
+
+// ── Screen: Team ──────────────────────────────────────────────
+function renderTeam() {
+  const { player } = state;
+  if (!player) return `<div class="loading">⏳ Carregando...</div>`;
+
+  const tc = TEAM_COLORS[player.team_color] || { bg: "#7C4DFF", light: "#EDE9FE", emoji: "🎨" };
+
+  return `
+  <div class="screen" style="background:linear-gradient(160deg,#FFF7E8 0%,${tc.bg}20 100%);align-items:flex-start;padding-top:28px">
+    <div class="container">
+      <div class="bounce-in text-center mb-6">
+        <div style="font-size:80px">🎨</div>
+        <h1 class="fredoka" style="font-size:40px;color:${tc.bg};line-height:1.15;margin-top:8px">
+          Você é da Equipe<br>${player.team_color}! ${tc.emoji}
+        </h1>
+      </div>
+
+      <div class="card slide-up mb-4" style="border:3px solid ${tc.bg}" id="team-members-card">
+        <h3 style="font-weight:800;color:#374151;margin-bottom:14px;font-size:16px;text-transform:uppercase;letter-spacing:.8px">👥 Sua Equipe</h3>
+        <div id="team-list"><div class="loading" style="padding:20px">Carregando equipe... ⏳</div></div>
+      </div>
+
+      <div class="card-dashed text-center mt-4" style="border-radius:16px;padding:20px;margin-bottom:16px">
+        <p style="font-size:13px;font-weight:700;color:#92400E;text-transform:uppercase;letter-spacing:1px;margin-bottom:8px">🧩 Sua Peça</p>
+        <p style="font-size:28px;font-weight:900;color:#1F2937">Peça #${player.puzzle_piece} — Número: ${player.puzzle_number}</p>
+      </div>
+
+      <div class="alert alert-success text-center mb-4">
+        <p style="font-weight:700;font-size:15px">🎯 Encontre sua equipe no ponto de encontro e juntem as peças!</p>
+      </div>
+
+      <button class="btn btn-primary" id="btn-go-final">Temos o quebra-cabeça! 🧩</button>
+    </div>
+  </div>`;
+}
+
+// ── Screen: Final ─────────────────────────────────────────────
+function renderFinal() {
+  return `
+  <div class="screen" style="background:linear-gradient(160deg,#FFF7E8 0%,#E0E7FF 100%)">
+    <div class="container">
+      ${state.finalSuccess ? `
+      <div class="card bounce-in text-center" style="border:3px solid #22C55E">
+        <div style="font-size:72px">🏆</div>
+        <h1 class="fredoka mt-3" style="font-size:36px;color:#16A34A;line-height:1.2">VOCÊS GANHARAM!</h1>
+        <p style="color:#374151;font-weight:700;font-size:17px;margin:16px 0;line-height:1.5">Agora vão buscar o prêmio:</p>
+        <div class="card-dashed" style="border-radius:16px;padding:20px;margin-bottom:20px">
+          <p style="font-size:18px;color:#92400E;font-weight:800;line-height:1.6">${state.prizeLocation || ""}</p>
+        </div>
+        <div style="font-size:44px;margin:12px 0">🥚🍫🎉🐰✨</div>
+        <p class="text-muted mt-3">Feliz Páscoa, equipe incrível! 💛</p>
+      </div>
+      ` : `
+      <div class="text-center mb-6">
+        <div style="font-size:80px">🔐</div>
+        <h1 class="fredoka mt-3" style="font-size:38px;color:#7C4DFF">Senha Final!</h1>
+        <p style="color:#6B7280;font-weight:600;margin-top:8px;font-size:16px;line-height:1.55">
+          Montaram o quebra-cabeça?<br>Formem a senha com os números das peças!
+        </p>
+      </div>
+      <div class="card" id="final-card">
+        <input class="input input-center" id="inp-password" placeholder="SENHA" />
+        <div id="final-error" class="hidden"></div>
+        <button class="btn btn-primary mt-4" id="btn-check-password" ${state.isLoading ? "disabled" : ""}>
+          ${state.isLoading ? "⏳ Verificando..." : "Revelar o Prêmio! 🎁"}
+        </button>
+      </div>
+      <div class="text-center mt-6">
+        <div style="font-size:52px">🐰</div>
+        <div class="bubble">Uni os números na ordem certa! 🧩</div>
+      </div>
+      `}
+    </div>
+  </div>`;
+}
+
+// ── Screen: Admin ─────────────────────────────────────────────
+function renderAdmin() {
+  const { adminPlayers, adminShowTeams, wsConnected } = state;
+
+  const total = adminPlayers.length;
+  const done = adminPlayers.filter(p => p.bonus_completed_at).length;
+  const playing = adminPlayers.filter(p => p.session_start_at && !p.bonus_completed_at).length;
+  const notStarted = adminPlayers.filter(p => !p.session_start_at).length;
+
+  function getStatus(p) {
+    if (p.bonus_completed_at) return { label: "Finalizou 🏆", color: "#22C55E", bg: "#D1FAE5" };
+    if (p.team_revealed_at) return { label: "Viu equipe 👥", color: "#7C4DFF", bg: "#EDE9FE" };
+    const cs = p.current_stage;
+    if (cs >= 4) return { label: "Etapa 3 ✅", color: "#D97706", bg: "#FEF3C7" };
+    if (cs === 3) return { label: "Etapa 3 ⭐", color: "#D97706", bg: "#FEF3C7" };
+    if (cs === 2) return { label: "Etapa 2 🗺️", color: "#7C4DFF", bg: "#EDE9FE" };
+    if (cs === 1) return { label: "Etapa 1 🥚", color: "#FF6B9E", bg: "#FDF2F8" };
+    if (p.session_start_at) return { label: "Logou", color: "#3B82F6", bg: "#EFF6FF" };
+    if (p.scanned_at) return { label: "Escaneou 📱", color: "#6B7280", bg: "#F3F4F6" };
+    return { label: "Aguardando ⚪", color: "#9CA3AF", bg: "#F3F4F6" };
+  }
+
+  function formatTime(sec) {
+    if (!sec) return "—";
+    const m = Math.floor(sec / 60);
+    const s = sec % 60;
+    return `${m}m ${s}s`;
+  }
+
+  // Sort: finalizados primeiro, depois por etapa, depois por nome
+  const sorted = [...adminPlayers].sort((a, b) => {
+    if (a.bonus_completed_at && !b.bonus_completed_at) return -1;
+    if (!a.bonus_completed_at && b.bonus_completed_at) return 1;
+    return (b.current_stage || 0) - (a.current_stage || 0);
+  });
+
+  return `
+  <div class="admin-screen">
+    <div style="max-width:720px;margin:0 auto">
+      <!-- Header -->
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:24px;padding-top:8px;flex-wrap:wrap;gap:10px">
+        <div>
+          <h1 class="fredoka" style="font-size:36px;color:#FF6B9E">🐰 Dashboard</h1>
+          <span style="font-size:13px;color:${wsConnected ? '#22C55E' : '#EF4444'};font-weight:700">
+            ${wsConnected ? "● Ao vivo" : "● Reconectando..."}
+          </span>
+        </div>
+        <div style="display:flex;gap:8px;flex-wrap:wrap">
+          <button class="btn btn-secondary" id="btn-toggle-teams" style="width:auto;padding:10px 16px;font-size:14px;border-radius:50px">
+            ${adminShowTeams ? "Ocultar Equipes" : "Mostrar Equipes"}
+          </button>
+          <button class="btn btn-secondary" id="btn-back-admin" style="width:auto;padding:10px 16px;font-size:14px;border-radius:50px;background:linear-gradient(135deg,#374151,#4B5563)">
+            ← Sair
+          </button>
+        </div>
+      </div>
+
+      <!-- Stats -->
+      <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:24px">
+        ${[
+          { label: "Total", value: total, icon: "👥", color: "#3B82F6" },
+          { label: "Jogando", value: playing, icon: "🎮", color: "#FF6B9E" },
+          { label: "Finalizaram", value: done, icon: "🏆", color: "#22C55E" },
+          { label: "Aguardam", value: notStarted, icon: "⏳", color: "#9CA3AF" },
+        ].map(s => `
+          <div class="stat-card" style="border:2px solid ${s.color}33">
+            <div style="font-size:24px">${s.icon}</div>
+            <div class="fredoka" style="font-size:30px;color:${s.color}">${s.value}</div>
+            <div style="color:#9CA3AF;font-size:12px;font-weight:700">${s.label}</div>
+          </div>`).join("")}
+      </div>
+
+      <!-- Player List -->
+      <div>
+        ${sorted.map(p => {
+          const status = getStatus(p);
+          const tc = TEAM_COLORS[p.team_color] || { bg: "#7C4DFF", emoji: "🎨" };
+          const attempts = (p.attempts_stage1||0) + (p.attempts_stage2||0) + (p.attempts_stage3||0);
+          return `
+          <div class="admin-card" style="border-color:${p.bonus_completed_at ? '#22C55E33' : 'transparent'}">
+            <div class="admin-avatar" style="background:${tc.bg}">${p.nome[0]}</div>
+            <div style="flex:1;min-width:0">
+              <div style="font-weight:800;color:#F9FAFB;font-size:16px">${p.nome} ${p.sobrenome}</div>
+              ${adminShowTeams ? `<div style="margin-top:4px"><span class="team-badge" style="background:${tc.bg};font-size:12px;padding:3px 10px">${tc.emoji} ${p.team_color} — Peça #${p.puzzle_piece}</span></div>` : ""}
+              <div style="color:#9CA3AF;font-size:12px;margin-top:4px">
+                ${attempts > 0 ? `${attempts} tentativa${attempts !== 1 ? "s" : ""}` : ""}
+                ${p.total_time_seconds ? ` · ⏱️ ${formatTime(p.total_time_seconds)}` : ""}
+              </div>
+            </div>
+            <div>
+              <span class="tag" style="color:${status.color};background:${status.bg}">${status.label}</span>
+            </div>
+          </div>`;
+        }).join("") || `<div style="color:#9CA3AF;text-align:center;padding:40px">Nenhum participante cadastrado</div>`}
+      </div>
+
+      <!-- Reset button -->
+      <div style="margin-top:30px;padding-top:20px;border-top:1px solid #374151;text-align:center">
+        <button class="btn btn-danger" id="btn-reset" style="width:auto;padding:10px 24px;font-size:14px;border-radius:50px">
+          🔄 Resetar Progresso (Evento Novo)
+        </button>
+        <p style="color:#6B7280;font-size:12px;margin-top:8px">Apaga apenas o progresso — participantes permanecem</p>
+      </div>
+    </div>
+  </div>`;
+}
+
+// ── Event Delegation ──────────────────────────────────────────
+function attachEvents() {
+  const app = document.getElementById("app");
+
+  // Start screen
+  on("btn-start", "click", () => { state.screen = "login"; render(); });
+  on("btn-admin-entry", "click", () => {
+    state.screen = "admin";
+    loadAdminPlayers();
+    render();
+  });
+
+  // Login screen
+  on("btn-login", "click", doLogin);
+  onKey("inp-sob", "Enter", doLogin);
+  onKey("inp-nome", "Enter", () => document.getElementById("inp-sob")?.focus());
+
+  // Quiz screen
+  document.querySelectorAll(".btn-option").forEach(btn => {
+    btn.addEventListener("click", () => {
+      const idx = parseInt(btn.dataset.index);
+      doAnswer(idx);
+    });
+  });
+  on("btn-next-stage", "click", goNextStage);
+
+  // Team screen
+  on("btn-go-final", "click", () => {
+    api("/team-revealed", "POST", { player_id: state.player.id }).catch(() => {});
+    state.screen = "final";
+    state.finalSuccess = false;
+    render();
+  });
+  // Load team members
+  if (state.screen === "team" && state.player) {
+    api(`/team/${state.player.team_id}`).then(data => {
+      const container = document.getElementById("team-list");
+      if (!container) return;
+      const tc = TEAM_COLORS[state.player.team_color] || { bg: "#7C4DFF" };
+      container.innerHTML = (data.members || []).map(m => `
+        <div style="display:flex;align-items:center;gap:10px;padding:10px 12px;background:${m.id === state.player.id ? tc.bg + '18' : '#F9FAFB'};border-radius:12px;margin-bottom:8px;border:2px solid ${m.id === state.player.id ? tc.bg : 'transparent'}">
+          <div style="width:36px;height:36px;background:${tc.bg};border-radius:50%;display:flex;align-items:center;justify-content:center;color:#fff;font-weight:900;font-size:15px;flex-shrink:0">${m.nome[0]}</div>
+          <span style="font-weight:${m.id === state.player.id ? 800 : 600};color:${m.id === state.player.id ? tc.bg : '#374151'}">
+            ${m.nome} ${m.sobrenome}${m.id === state.player.id ? " <strong>(você)</strong>" : ""}
+          </span>
+          <span style="margin-left:auto;font-size:13px;color:#9CA3AF;font-weight:700">Peça #${m.puzzle_piece}</span>
+        </div>`).join("");
+    });
+  }
+
+  // Final screen
+  on("btn-check-password", "click", doCheckPassword);
+  onKey("inp-password", "Enter", doCheckPassword);
+
+  // Admin screen
+  on("btn-toggle-teams", "click", () => {
+    state.adminShowTeams = !state.adminShowTeams;
+    render();
+  });
+  on("btn-back-admin", "click", () => {
+    state.screen = state.player ? "quiz" : "start";
+    render();
+  });
+  on("btn-reset", "click", () => {
+    if (!confirm("⚠️ Confirma o reset de TODO o progresso? Isso não pode ser desfeito.")) return;
+    api("/admin/reset", "POST", { confirm: "RESETAR" }).then(() => {
+      alert("✅ Progresso resetado! Prontos para um novo evento.");
+    });
+  });
+}
+
+function on(id, event, handler) {
+  const el = document.getElementById(id);
+  if (el) el.addEventListener(event, handler);
+}
+function onKey(id, key, handler) {
+  const el = document.getElementById(id);
+  if (el) el.addEventListener("keydown", e => { if (e.key === key) handler(); });
+}
+
+// ── Actions ───────────────────────────────────────────────────
+async function doLogin() {
+  const nome = document.getElementById("inp-nome")?.value?.trim();
+  const sob = document.getElementById("inp-sob")?.value?.trim();
+  if (!nome || !sob) return showLoginError("Preencha nome e sobrenome! 😊");
+
+  state.isLoading = true;
+  render();
+
+  const data = await api("/login", "POST", { nome, sobrenome: sob });
+
+  if (data.ok) {
+    state.player = data.player;
+    state.isLoading = false;
+    // Decide em qual etapa continuar
+    const cs = data.player.current_stage;
+    if (data.player.bonus_completed_at) {
+      state.screen = "final";
+      state.finalSuccess = true;
+    } else if (data.player.team_revealed_at) {
+      state.screen = "final";
+    } else if (cs >= 4) {
+      state.screen = "team";
+    } else {
+      state.quizStage = Math.max(cs, 1);
+      state.screen = "quiz";
+      await loadQuestions(state.quizStage);
+    }
+    render();
+  } else {
+    state.isLoading = false;
+    showLoginError("Não encontrei esse nome… confere a escrita! 🤔");
+  }
+}
+
+function showLoginError(msg) {
+  const el = document.getElementById("login-error");
+  if (el) {
+    el.className = "alert alert-error";
+    el.textContent = msg;
+    const card = document.getElementById("login-card");
+    if (card) { card.classList.add("shake"); setTimeout(() => card.classList.remove("shake"), 500); }
+  }
+  state.isLoading = false;
+  render();
+}
+
+async function loadQuestions(stage) {
+  const data = await api(`/questions/${stage}`);
+  state.questions = data.questions || [];
+  state.currentQIndex = 0;
+  state.selectedAnswer = null;
+  state.showHint = false;
+}
+
+async function doAnswer(index) {
+  if (state.selectedAnswer !== null) return;
+  const q = state.questions[state.currentQIndex];
+  if (!q) return;
+
+  state.selectedAnswer = index;
+  render();
+
+  const data = await api("/answer", "POST", {
+    player_id: state.player.id,
+    stage: state.quizStage,
+    question_id: q.id,
+    answer_index: index,
+  });
+
+  if (data.correct) {
+    state.showHint = true;
+    state.hintText = data.hint || "Excelente! Continue! 🎉";
+    if (state.player) state.player[`attempts_stage${state.quizStage}`] = (state.player[`attempts_stage${state.quizStage}`] || 0) + 1;
+    launchConfetti();
+    render();
+  } else {
+    if (state.player) state.player[`attempts_stage${state.quizStage}`] = (state.player[`attempts_stage${state.quizStage}`] || 0) + 1;
+    // Shake animation then load next question
+    setTimeout(async () => {
+      const next = (state.currentQIndex + 1) % state.questions.length;
+      state.currentQIndex = next;
+      state.selectedAnswer = null;
+      render();
+    }, 1400);
+  }
+}
+
+async function goNextStage() {
+  if (state.quizStage < 3) {
+    state.quizStage++;
+    state.showHint = false;
+    state.selectedAnswer = null;
+    await loadQuestions(state.quizStage);
+    render();
+  } else {
+    state.screen = "team";
+    state.showHint = false;
+    render();
+  }
+}
+
+async function doCheckPassword() {
+  const pw = document.getElementById("inp-password")?.value;
+  if (!pw) return;
+
+  state.isLoading = true;
+  render();
+
+  const data = await api("/final-password", "POST", {
+    player_id: state.player?.id,
+    password: pw,
+  });
+
+  state.isLoading = false;
+  if (data.correct) {
+    state.finalSuccess = true;
+    state.prizeLocation = data.prize;
+    launchConfetti();
+    render();
+  } else {
+    const el = document.getElementById("final-error");
+    if (el) {
+      el.className = "alert alert-error";
+      el.textContent = "Confiram a ordem dos números nas peças 🧩";
+    }
+    const card = document.getElementById("final-card");
+    if (card) { card.classList.add("shake"); setTimeout(() => card.classList.remove("shake"), 500); }
+    render();
+  }
+}
+
+async function loadAdminPlayers() {
+  const data = await api("/admin/players");
+  state.adminPlayers = data.players || [];
+  render();
+}
+
+// ── Init ──────────────────────────────────────────────────────
+connectWS();
+render();
+</script>
+</body>
+</html>
