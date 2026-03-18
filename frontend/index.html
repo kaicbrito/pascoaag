@@ -1,1 +1,1129 @@
-...<h1>Páscoa AG 2026</h1>...<p>Join us for a Páscoa AG 2026 celebration!</p>...<p>Come celebrate in 2026!</p>...
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <meta name="mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <title>CaçaPáscoa 🐰</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&family=Fredoka+One&display=swap" rel="stylesheet" />
+  <style>
+    /* ══════════════════════════════════════════════════════════
+       RESET & BASE
+    ══════════════════════════════════════════════════════════ */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { font-size: 16px; height: 100%; }
+    body {
+      font-family: 'Nunito', sans-serif;
+      background: #FFF7E8;
+      color: #1F2937;
+      min-height: 100%;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+      overflow-x: hidden;
+    }
+    #app { min-height: 100vh; }
+    .fredoka { font-family: 'Fredoka One', cursive; }
+
+    /* ══════════════════════════════════════════════════════════
+       FLUID TYPOGRAPHY — escala de mobile (360px) a 4K (3840px)
+       Usa clamp(min, preferred, max) para escalar suavemente
+    ══════════════════════════════════════════════════════════ */
+    :root {
+      /* Escala base: 1rem = 16px em mobile, cresce até ~28px em 4K */
+      --scale: clamp(1rem, 0.8rem + 0.5vw, 1.75rem);
+
+      /* Tipografia */
+      --text-xs:   clamp(0.7rem,  0.6rem + 0.3vw, 1.1rem);
+      --text-sm:   clamp(0.8rem,  0.7rem + 0.35vw, 1.25rem);
+      --text-base: clamp(0.9rem,  0.8rem + 0.4vw,  1.4rem);
+      --text-lg:   clamp(1rem,    0.9rem + 0.5vw,  1.6rem);
+      --text-xl:   clamp(1.15rem, 1rem   + 0.6vw,  2rem);
+      --text-2xl:  clamp(1.4rem,  1.2rem + 0.8vw,  2.5rem);
+      --text-3xl:  clamp(1.8rem,  1.5rem + 1.2vw,  3.5rem);
+      --text-4xl:  clamp(2.2rem,  1.8rem + 1.8vw,  5rem);
+      --text-hero: clamp(2.8rem,  2.2rem + 2.5vw,  7rem);
+
+      /* Ícones / emojis */
+      --icon-sm:   clamp(1.5rem,  1.2rem + 1vw,    4rem);
+      --icon-md:   clamp(2.5rem,  2rem   + 1.5vw,  6rem);
+      --icon-lg:   clamp(3.5rem,  3rem   + 2vw,    9rem);
+      --icon-xl:   clamp(5rem,    4rem   + 3vw,    12rem);
+
+      /* Espaçamentos */
+      --sp-xs:  clamp(6px,   0.3vw + 4px,  20px);
+      --sp-sm:  clamp(10px,  0.6vw + 6px,  32px);
+      --sp-md:  clamp(16px,  1vw   + 10px, 48px);
+      --sp-lg:  clamp(24px,  1.5vw + 14px, 72px);
+      --sp-xl:  clamp(32px,  2vw   + 18px, 96px);
+
+      /* Raios de borda */
+      --radius-sm:  clamp(8px,   0.5vw, 20px);
+      --radius-md:  clamp(14px,  1vw,   32px);
+      --radius-lg:  clamp(20px,  1.5vw, 48px);
+      --radius-pill: 9999px;
+
+      /* Largura máxima do container */
+      --max-w: clamp(380px, 90vw, 680px);
+
+      /* Cores */
+      --pink:    #FF6B9E;
+      --purple:  #7C4DFF;
+      --gold:    #FFB020;
+      --green:   #22C55E;
+      --red:     #EF4444;
+      --cream:   #FFF7E8;
+      --dark:    #1F2937;
+      --muted:   #9CA3AF;
+      --white:   #FFFFFF;
+    }
+
+    /* ══════════════════════════════════════════════════════════
+       ANIMAÇÕES
+    ══════════════════════════════════════════════════════════ */
+    @keyframes float      { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-10px)} }
+    @keyframes bounce-in  { 0%{transform:scale(0.3);opacity:0} 55%{transform:scale(1.08)} 75%{transform:scale(0.94)} 100%{transform:scale(1);opacity:1} }
+    @keyframes shake      { 0%,100%{transform:translateX(0)} 20%{transform:translateX(-8px)} 40%{transform:translateX(8px)} 60%{transform:translateX(-8px)} 80%{transform:translateX(8px)} }
+    @keyframes slide-up   { from{transform:translateY(24px);opacity:0} to{transform:translateY(0);opacity:1} }
+    @keyframes fade-in    { from{opacity:0} to{opacity:1} }
+    @keyframes sparkle    { 0%,100%{opacity:0;transform:scale(0) rotate(0deg)} 50%{opacity:1;transform:scale(1) rotate(20deg)} }
+    @keyframes pulse-glow { 0%,100%{box-shadow:0 0 20px rgba(255,107,158,.4)} 50%{box-shadow:0 0 50px rgba(255,107,158,.85)} }
+    @keyframes confetti-fall { 0%{transform:translateY(-120px) rotate(0deg);opacity:1} 100%{transform:translateY(110vh) rotate(720deg);opacity:0} }
+    @keyframes progress-stripe { 0%{background-position:40px 0} 100%{background-position:0 0} }
+    @keyframes pop        { 0%{transform:scale(1)} 50%{transform:scale(1.15)} 100%{transform:scale(1)} }
+
+    .float      { animation: float 3s ease-in-out infinite; }
+    .bounce-in  { animation: bounce-in 0.55s cubic-bezier(0.68,-0.55,0.265,1.55) forwards; }
+    .shake      { animation: shake 0.45s ease-in-out; }
+    .slide-up   { animation: slide-up 0.4s ease-out forwards; }
+    .fade-in    { animation: fade-in 0.4s ease forwards; }
+    .pulse-glow { animation: pulse-glow 2.2s ease-in-out infinite; }
+    .pop        { animation: pop 0.25s ease; }
+
+    /* ══════════════════════════════════════════════════════════
+       LAYOUT
+    ══════════════════════════════════════════════════════════ */
+    .screen {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: var(--sp-md);
+      position: relative;
+      overflow: hidden;
+    }
+    .screen-top {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: var(--sp-lg) var(--sp-md);
+      position: relative;
+      overflow: hidden;
+    }
+    .container {
+      width: 100%;
+      max-width: var(--max-w);
+    }
+
+    /* ══════════════════════════════════════════════════════════
+       CARDS
+    ══════════════════════════════════════════════════════════ */
+    .card {
+      background: var(--white);
+      border-radius: var(--radius-lg);
+      padding: var(--sp-lg);
+      box-shadow: 0 8px 32px rgba(0,0,0,.08);
+      border: 2px solid rgba(255,107,158,.1);
+    }
+    .card-dashed {
+      border: 3px dashed var(--gold);
+      background: #FFFBEB;
+      border-radius: var(--radius-md);
+      padding: var(--sp-md);
+    }
+    .card-success { border: 3px solid var(--green); background: #F0FDF4; border-radius: var(--radius-lg); padding: var(--sp-lg); }
+    .card-error   { border: 3px solid var(--red);   background: #FEF2F2; border-radius: var(--radius-lg); padding: var(--sp-md); }
+
+    /* ══════════════════════════════════════════════════════════
+       BOTÕES
+    ══════════════════════════════════════════════════════════ */
+    .btn {
+      display: block;
+      width: 100%;
+      border: none;
+      border-radius: var(--radius-pill);
+      padding: var(--sp-sm) var(--sp-md);
+      font-size: var(--text-lg);
+      font-weight: 800;
+      font-family: 'Nunito', sans-serif;
+      cursor: pointer;
+      transition: transform .2s, box-shadow .2s;
+      line-height: 1.3;
+      text-align: center;
+    }
+    .btn:active { transform: scale(.97); }
+
+    .btn-primary {
+      background: linear-gradient(135deg, #FF6B9E, #FF8FB1);
+      color: var(--white);
+      box-shadow: 0 4px 20px rgba(255,107,158,.45);
+    }
+    .btn-primary:hover { transform: translateY(-3px) scale(1.02); box-shadow: 0 10px 30px rgba(255,107,158,.55); }
+
+    .btn-secondary {
+      background: linear-gradient(135deg, #7C4DFF, #9D72FF);
+      color: var(--white);
+      box-shadow: 0 4px 20px rgba(124,77,255,.4);
+    }
+    .btn-secondary:hover { transform: translateY(-2px); }
+
+    .btn-ghost {
+      background: rgba(255,255,255,.15);
+      color: var(--white);
+      border: 2px solid rgba(255,255,255,.4);
+      backdrop-filter: blur(4px);
+    }
+    .btn-ghost:hover { background: rgba(255,255,255,.25); }
+
+    .btn-danger { background: #EF4444; color: var(--white); }
+
+    /* Opções de quiz */
+    .btn-option {
+      display: flex;
+      align-items: center;
+      gap: var(--sp-sm);
+      width: 100%;
+      background: var(--white);
+      border: 3px solid var(--gold);
+      border-radius: var(--radius-md);
+      padding: var(--sp-sm) var(--sp-md);
+      font-size: var(--text-base);
+      font-weight: 700;
+      font-family: 'Nunito', sans-serif;
+      cursor: pointer;
+      text-align: left;
+      color: var(--dark);
+      margin-bottom: var(--sp-sm);
+      transition: all .2s;
+      line-height: 1.4;
+    }
+    .btn-option:hover:not(:disabled) { background: #FFF7E8; transform: translateX(5px); border-color: var(--pink); }
+    .btn-option:disabled              { cursor: default; }
+    .btn-option.correct { background: #F0FDF4; border-color: var(--green); color: #16A34A; animation: bounce-in .4s; }
+    .btn-option.wrong   { background: #FEF2F2; border-color: var(--red);   color: #DC2626; }
+
+    .opt-letter {
+      flex-shrink: 0;
+      width: clamp(26px, 2vw + 16px, 52px);
+      height: clamp(26px, 2vw + 16px, 52px);
+      border-radius: 50%;
+      background: #FFF7E8;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 900;
+      font-size: var(--text-sm);
+      color: var(--gold);
+    }
+    .btn-option.correct .opt-letter { background: #DCFCE7; color: #16A34A; }
+    .btn-option.wrong   .opt-letter { background: #FEE2E2; color: #DC2626; }
+
+    /* ══════════════════════════════════════════════════════════
+       INPUTS
+    ══════════════════════════════════════════════════════════ */
+    .input {
+      width: 100%;
+      border: 3px solid var(--gold);
+      border-radius: var(--radius-md);
+      padding: var(--sp-sm) var(--sp-md);
+      font-size: var(--text-xl);
+      font-weight: 700;
+      font-family: 'Nunito', sans-serif;
+      color: var(--dark);
+      background: var(--white);
+      outline: none;
+      transition: border-color .2s, box-shadow .2s;
+    }
+    .input:focus { border-color: var(--pink); box-shadow: 0 0 0 5px rgba(255,107,158,.15); }
+    .input-center { text-align: center; letter-spacing: 4px; text-transform: uppercase; }
+
+    label {
+      display: block;
+      font-weight: 700;
+      color: #374151;
+      margin-bottom: var(--sp-xs);
+      font-size: var(--text-base);
+    }
+
+    /* ══════════════════════════════════════════════════════════
+       PROGRESS BAR
+    ══════════════════════════════════════════════════════════ */
+    .progress-bar  { height: clamp(8px, 0.6vw, 16px); background: #FFE4B5; border-radius: 99px; overflow: hidden; }
+    .progress-fill { height: 100%; background: linear-gradient(90deg, var(--pink), var(--gold)); border-radius: 99px; transition: width .6s ease; }
+
+    /* ══════════════════════════════════════════════════════════
+       ALERTAS
+    ══════════════════════════════════════════════════════════ */
+    .alert {
+      border-radius: var(--radius-sm);
+      padding: var(--sp-sm) var(--sp-md);
+      font-weight: 600;
+      font-size: var(--text-base);
+      margin-top: var(--sp-sm);
+    }
+    .alert-error   { background: #FEF2F2; border: 2px solid #FCA5A5; color: #DC2626; }
+    .alert-success { background: #F0FDF4; border: 2px solid #86EFAC; color: #16A34A; }
+    .alert-warning { background: #FFFBEB; border: 2px solid #FDE68A; color: #92400E; }
+    .alert-info    { background: #EFF6FF; border: 2px solid #BFDBFE; color: #1D4ED8; }
+
+    /* ══════════════════════════════════════════════════════════
+       BADGES & TAGS
+    ══════════════════════════════════════════════════════════ */
+    .tag { display: inline-block; padding: clamp(3px,0.3vw,8px) clamp(8px,0.8vw,18px); border-radius: var(--radius-pill); font-size: var(--text-sm); font-weight: 700; white-space: nowrap; }
+    .team-badge { display: inline-flex; align-items: center; gap: 5px; padding: clamp(4px,0.4vw,10px) clamp(10px,1vw,22px); border-radius: var(--radius-pill); font-weight: 800; font-size: var(--text-sm); color: var(--white); }
+
+    /* ══════════════════════════════════════════════════════════
+       DECORATIVOS
+    ══════════════════════════════════════════════════════════ */
+    .bg-dots {
+      background-image: radial-gradient(circle, var(--gold) 1px, transparent 1px);
+      background-size: clamp(20px, 2vw, 40px) clamp(20px, 2vw, 40px);
+      opacity: .12;
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+    }
+    .sparkle {
+      position: absolute;
+      animation: sparkle 2s ease-in-out infinite;
+      pointer-events: none;
+      font-size: var(--icon-sm);
+    }
+    .confetti-piece {
+      position: fixed;
+      top: -30px;
+      animation: confetti-fall linear forwards;
+      border-radius: 2px;
+      z-index: 9999;
+      pointer-events: none;
+    }
+    .bubble {
+      background: var(--white);
+      border: 2px solid var(--gold);
+      border-radius: var(--radius-md);
+      padding: var(--sp-xs) var(--sp-sm);
+      font-size: var(--text-sm);
+      font-weight: 600;
+      color: var(--dark);
+      max-width: clamp(180px, 50vw, 320px);
+      margin: var(--sp-xs) auto 0;
+      position: relative;
+      text-align: center;
+    }
+    .bubble::before {
+      content: '';
+      position: absolute;
+      top: clamp(-8px, -0.6vw, -12px);
+      left: 50%;
+      transform: translateX(-50%);
+      width: 0; height: 0;
+      border-left: clamp(6px,0.5vw,10px) solid transparent;
+      border-right: clamp(6px,0.5vw,10px) solid transparent;
+      border-bottom: clamp(8px,0.6vw,12px) solid var(--gold);
+    }
+
+    /* ══════════════════════════════════════════════════════════
+       ADMIN — otimizado para telão 4K
+    ══════════════════════════════════════════════════════════ */
+    .admin-wrap {
+      min-height: 100vh;
+      background: #0F172A;
+      padding: var(--sp-md);
+    }
+    .admin-inner { max-width: 1400px; margin: 0 auto; }
+
+    .admin-grid {
+      display: grid;
+      /* Em mobile: 1 coluna. Tablet: 2. Desktop/4K: 3 ou 4. */
+      grid-template-columns: repeat(auto-fill, minmax(clamp(260px, 28vw, 420px), 1fr));
+      gap: var(--sp-md);
+    }
+
+    .admin-card {
+      background: #1E293B;
+      border-radius: var(--radius-md);
+      padding: var(--sp-md);
+      display: flex;
+      align-items: center;
+      gap: var(--sp-sm);
+      border: 2px solid transparent;
+      transition: border-color .3s;
+    }
+    .admin-card.finished { border-color: rgba(34,197,94,.35); }
+
+    .admin-avatar {
+      flex-shrink: 0;
+      width: clamp(40px, 3.5vw, 80px);
+      height: clamp(40px, 3.5vw, 80px);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--white);
+      font-weight: 900;
+      font-size: var(--text-xl);
+    }
+
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(clamp(100px,15vw,200px), 1fr));
+      gap: var(--sp-sm);
+      margin-bottom: var(--sp-lg);
+    }
+    .stat-card {
+      background: #1E293B;
+      border-radius: var(--radius-md);
+      padding: var(--sp-md);
+      text-align: center;
+    }
+
+    /* ══════════════════════════════════════════════════════════
+       UTILITÁRIOS
+    ══════════════════════════════════════════════════════════ */
+    .text-center { text-align: center; }
+    .text-muted  { color: var(--muted); font-size: var(--text-sm); font-weight: 600; }
+    .hidden      { display: none !important; }
+    .mt-sm { margin-top: var(--sp-sm); }
+    .mt-md { margin-top: var(--sp-md); }
+    .mt-lg { margin-top: var(--sp-lg); }
+    .mb-sm { margin-bottom: var(--sp-sm); }
+    .mb-md { margin-bottom: var(--sp-md); }
+    .loading { text-align: center; padding: var(--sp-xl); color: var(--muted); font-size: var(--text-xl); }
+
+    /* ══════════════════════════════════════════════════════════
+       ESPECÍFICO DE TELA
+    ══════════════════════════════════════════════════════════ */
+
+    /* Membro da equipe */
+    .member-row {
+      display: flex;
+      align-items: center;
+      gap: var(--sp-sm);
+      padding: var(--sp-sm);
+      border-radius: var(--radius-sm);
+      margin-bottom: var(--sp-xs);
+      border: 2px solid transparent;
+    }
+    .member-avatar {
+      flex-shrink: 0;
+      width: clamp(32px, 2.5vw, 56px);
+      height: clamp(32px, 2.5vw, 56px);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--white);
+      font-weight: 900;
+      font-size: var(--text-base);
+    }
+
+    /* ══════════════════════════════════════════════════════════
+       RESPONSIVIDADE EXTRA — prints e landscape
+    ══════════════════════════════════════════════════════════ */
+    @media (orientation: landscape) and (max-height: 500px) {
+      .screen { justify-content: flex-start; padding-top: var(--sp-sm); }
+      .icon-hero { font-size: var(--icon-md) !important; }
+    }
+    @media (min-width: 1920px) {
+      /* 1080p+ e 4K: aumenta a escala base do root */
+      :root { --scale: clamp(1.2rem, 0.9rem + 0.6vw, 2rem); }
+    }
+    @media (min-width: 3000px) {
+      /* Ultra-wide e 4K verdadeiro */
+      :root {
+        --text-base: 2rem;
+        --text-lg:   2.4rem;
+        --text-xl:   3rem;
+        --text-2xl:  3.8rem;
+        --text-3xl:  5rem;
+        --text-4xl:  7rem;
+        --text-hero: 9rem;
+        --icon-lg:   10rem;
+        --icon-xl:   14rem;
+        --sp-md:     60px;
+        --sp-lg:     90px;
+        --max-w:     900px;
+      }
+    }
+  </style>
+</head>
+<body>
+<div id="app"><div class="loading">🐰 Carregando CaçaPáscoa...</div></div>
+
+<script>
+// ════════════════════════════════════════════════════════════
+//  CaçaPáscoa — Frontend responsivo (Mobile → 4K)
+//  Vanilla JS, sem dependências externas
+// ════════════════════════════════════════════════════════════
+
+const TEAM_COLORS = {
+  "AZUL":     { bg:"#3B82F6", light:"#EFF6FF", emoji:"💙" },
+  "ROSA":     { bg:"#EC4899", light:"#FDF2F8", emoji:"🩷" },
+  "VERDE":    { bg:"#22C55E", light:"#F0FDF4", emoji:"💚" },
+  "AMARELO":  { bg:"#EAB308", light:"#FEFCE8", emoji:"💛" },
+  "ROXO":     { bg:"#7C4DFF", light:"#EDE9FE", emoji:"💜" },
+  "LARANJA":  { bg:"#F97316", light:"#FFF7ED", emoji:"🧡" },
+  "VERMELHO": { bg:"#EF4444", light:"#FEF2F2", emoji:"❤️" },
+  "TURQUESA": { bg:"#06B6D4", light:"#ECFEFF", emoji:"🩵" },
+  "DOURADO":  { bg:"#D97706", light:"#FFFBEB", emoji:"🌟" },
+  "PRATA":    { bg:"#6B7280", light:"#F9FAFB", emoji:"🩶" },
+  "BRONZE":   { bg:"#92400E", light:"#FFF7ED", emoji:"🤎" },
+};
+const STAGE_ICONS  = { 1:"🥚", 2:"🗺️", 3:"⭐" };
+const STAGE_COLORS = { 1:"#FF6B9E", 2:"#7C4DFF", 3:"#FFB020" };
+const CONFETTI_COLORS = ["#FF6B9E","#7C4DFF","#FFB020","#22C55E","#38BDF8","#FB923C","#A78BFA"];
+
+// ── State ────────────────────────────────────────────────────
+const S = {
+  screen: "start",
+  player: null,
+  quizStage: 1,
+  questions: [],
+  qIndex: 0,
+  selected: null,
+  showHint: false,
+  hintText: "",
+  adminPlayers: [],
+  adminShowTeams: false,
+  finalSuccess: false,
+  prizeLocation: "",
+  loading: false,
+  wsOk: false,
+};
+
+// ── Routing (hash) ───────────────────────────────────────────
+function checkRoute() {
+  const hash = location.hash;
+  if (hash === "#/admin" || hash === "#admin") {
+    S.screen = "admin";
+    loadAdminPlayers();
+    render();
+  }
+}
+window.addEventListener("hashchange", checkRoute);
+
+// ── WebSocket ────────────────────────────────────────────────
+let ws;
+function connectWS() {
+  const proto = location.protocol === "https:" ? "wss:" : "ws:";
+  ws = new WebSocket(`${proto}//${location.host}`);
+  ws.onopen  = () => { S.wsOk = true; };
+  ws.onclose = () => { S.wsOk = false; setTimeout(connectWS, 3000); };
+  ws.onmessage = (e) => {
+    try {
+      const d = JSON.parse(e.data);
+      if (d.type === "FULL_STATE") {
+        S.adminPlayers = d.players;
+        if (S.screen === "admin") render();
+      } else if (d.type === "PLAYER_UPDATE") {
+        const i = S.adminPlayers.findIndex(p => p.id === d.player.id);
+        if (i >= 0) S.adminPlayers[i] = d.player; else S.adminPlayers.push(d.player);
+        if (S.player?.id === d.player.id) S.player = d.player;
+        if (S.screen === "admin") render();
+      }
+    } catch(_) {}
+  };
+}
+
+// ── API ──────────────────────────────────────────────────────
+async function api(path, method = "GET", body = null) {
+  const opts = { method, headers: { "Content-Type": "application/json" } };
+  if (body) opts.body = JSON.stringify(body);
+  const r = await fetch(`/api${path}`, opts);
+  return r.json();
+}
+
+// ── Confetti ─────────────────────────────────────────────────
+function confetti() {
+  for (let i = 0; i < 60; i++) {
+    setTimeout(() => {
+      const el = document.createElement("div");
+      el.className = "confetti-piece";
+      const size = 8 + Math.random() * 10;
+      el.style.cssText = `
+        left:${Math.random()*100}vw;
+        width:${size}px; height:${size}px;
+        background:${CONFETTI_COLORS[i % CONFETTI_COLORS.length]};
+        animation-duration:${1.5 + Math.random() * 2}s;
+        animation-delay:${Math.random() * 0.4}s;
+        border-radius:${Math.random() > .5 ? "50%" : "2px"};
+      `;
+      document.body.appendChild(el);
+      setTimeout(() => el.remove(), 4000);
+    }, i * 35);
+  }
+}
+
+// ════════════════════════════════════════════════════════════
+//  RENDERS
+// ════════════════════════════════════════════════════════════
+function render() {
+  const app = document.getElementById("app");
+  switch (S.screen) {
+    case "start":  app.innerHTML = renderStart();  break;
+    case "login":  app.innerHTML = renderLogin();  break;
+    case "quiz":   app.innerHTML = renderQuiz();   break;
+    case "team":   app.innerHTML = renderTeam();   break;
+    case "final":  app.innerHTML = renderFinal();  break;
+    case "admin":  app.innerHTML = renderAdmin();  break;
+  }
+  bindEvents();
+}
+
+// ── START ────────────────────────────────────────────────────
+function renderStart() {
+  return `
+  <div class="screen" style="background:linear-gradient(160deg,#FFF7E8 0%,#FFE4F0 100%)">
+    <div class="bg-dots"></div>
+    <span class="sparkle" style="top:8%;left:10%;animation-delay:0s">✨</span>
+    <span class="sparkle" style="top:15%;right:8%;animation-delay:.7s">⭐</span>
+    <span class="sparkle" style="bottom:25%;left:5%;animation-delay:1.2s">🌟</span>
+    <span class="sparkle" style="bottom:12%;right:12%;animation-delay:.4s">✨</span>
+    <span class="sparkle" style="top:40%;left:3%;animation-delay:1.6s">🐣</span>
+    <span class="sparkle" style="top:35%;right:4%;animation-delay:.9s">🥚</span>
+
+    <div class="container text-center" style="position:relative;z-index:1">
+      <div class="float" style="font-size:var(--icon-xl);line-height:1;margin-bottom:var(--sp-sm)">🐰</div>
+
+      <h1 class="fredoka" style="font-size:var(--text-hero);color:#FF6B9E;text-shadow:4px 4px 0 rgba(255,107,158,.18);line-height:1">
+        CaçaPáscoa
+      </h1>
+      <div style="font-size:var(--text-3xl);margin-top:-4px;margin-bottom:var(--sp-md)">🐣🍫🥚</div>
+
+      <div class="card mb-md">
+        <p style="font-size:var(--text-xl);color:#6B7280;font-weight:600;line-height:1.65">
+          A Páscoa ficou mais divertida.<br>
+          <span style="color:#FF6B9E;font-weight:900">Vamos jogar?</span> 🎉
+        </p>
+      </div>
+
+      <button class="btn btn-primary pulse-glow" id="btn-start" style="font-size:var(--text-2xl);padding:var(--sp-md) var(--sp-xl)">
+        🐰 Começar a Caça!
+      </button>
+
+      <p class="text-muted mt-md">3 pistas · equipes · prêmio surpresa 🎁</p>
+    </div>
+  </div>`;
+}
+
+// ── LOGIN ────────────────────────────────────────────────────
+function renderLogin() {
+  return `
+  <div class="screen" style="background:linear-gradient(160deg,#FFF7E8 0%,#EDE9FF 100%)">
+    <div class="container">
+      <div class="text-center mb-md">
+        <div class="float" style="font-size:var(--icon-lg);line-height:1">🐰</div>
+        <div class="bubble">Diz quem é você! 🐣</div>
+        <h2 class="fredoka mt-md" style="font-size:var(--text-4xl);color:#7C4DFF">Quem é você?</h2>
+      </div>
+
+      <div class="card slide-up" id="login-card">
+        <div class="mb-md">
+          <label for="inp-nome">Seu Primeiro Nome</label>
+          <input class="input" id="inp-nome" placeholder="Ex: Ana, Carlos..." autocomplete="off" autocapitalize="words" />
+        </div>
+        <div class="mb-md">
+          <label for="inp-sob">Sobrenome (senha)</label>
+          <input class="input" id="inp-sob" type="password" placeholder="••••••••" />
+        </div>
+        <div id="login-error" class="hidden"></div>
+        <button class="btn btn-primary" id="btn-login" ${S.loading?"disabled":""}>
+          ${S.loading ? "⏳ Entrando..." : "Entrar na Caça 🚀"}
+        </button>
+      </div>
+      <p class="text-muted text-center mt-md">💡 Primeiro nome = login &nbsp;·&nbsp; Sobrenome = senha</p>
+    </div>
+  </div>`;
+}
+
+// ── QUIZ ─────────────────────────────────────────────────────
+function renderQuiz() {
+  if (!S.questions.length) return `<div class="loading">⏳ Carregando perguntas...</div>`;
+
+  const { quizStage: st, qIndex, selected, showHint, hintText, player } = S;
+  const q = S.questions[qIndex];
+  const color = STAGE_COLORS[st];
+  const icon  = STAGE_ICONS[st];
+  const pct   = (st / 3) * 100;
+  const att   = player ? (player[`attempts_stage${st}`] || 0) : 0;
+  const opts  = [q.option_a, q.option_b, q.option_c, q.option_d];
+  const letters = ["A","B","C","D"];
+
+  return `
+  <div class="screen-top" style="background:linear-gradient(160deg,#FFF7E8 0%,${color}22 100%)">
+    <div class="container">
+      <!-- Progress header -->
+      <div style="margin-bottom:var(--sp-md)">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:var(--sp-xs)">
+          <span class="fredoka" style="color:${color};font-size:var(--text-xl)">${icon} Etapa ${st} de 3</span>
+          <span class="text-muted">${att} tentativa${att!==1?"s":""}</span>
+        </div>
+        <div class="progress-bar"><div class="progress-fill" style="width:${pct}%"></div></div>
+      </div>
+
+      ${!showHint ? `
+      <!-- Pergunta -->
+      <div class="card slide-up" id="quiz-card">
+        <div class="text-center mb-md">
+          <div style="font-size:var(--icon-lg);line-height:1;margin-bottom:var(--sp-sm)">${icon}</div>
+          <h2 class="fredoka" style="font-size:var(--text-2xl);color:var(--dark);line-height:1.3">${q.question}</h2>
+        </div>
+        <div>
+          ${opts.map((o,i)=>{
+            let cls = "btn-option";
+            if(selected!==null) {
+              if(i===selected && q._correct!=null && i===q._correct) cls+=" correct";
+              else if(i===selected) cls+=" wrong";
+            }
+            return `<button class="${cls}" data-idx="${i}" ${selected!==null?"disabled":""}>
+              <span class="opt-letter">${letters[i]}</span>
+              <span style="flex:1">${o}</span>
+            </button>`;
+          }).join("")}
+        </div>
+        ${selected!==null && q._correct!=null && selected!==q._correct ? `
+          <div class="alert alert-error">
+            <strong>Quase!</strong> Vamos tentar outra 😉
+          </div>` : ""}
+      </div>
+
+      <!-- Coelho guia -->
+      <div class="text-center mt-md">
+        <div style="font-size:var(--icon-md)">🐰</div>
+        <div class="bubble">${selected===null ? "Escolha com cuidado! 🤔" : "Aguenta, vai que vai! 💪"}</div>
+      </div>
+
+      ` : `
+      <!-- Dica revelada -->
+      <div class="card bounce-in text-center" style="border:3px solid ${color}">
+        <div style="font-size:var(--icon-lg)">🎉</div>
+        <h2 class="fredoka mt-sm" style="font-size:var(--text-3xl);color:#22C55E">Acertou! Incrível!</h2>
+        <p style="color:#6B7280;font-size:var(--text-lg);margin-top:var(--sp-xs);font-weight:600">
+          Boa! Sua próxima pista está quase lá 🐣
+        </p>
+        <div class="card-dashed mt-md mb-md">
+          <p style="font-size:var(--text-xs);font-weight:700;color:#92400E;text-transform:uppercase;letter-spacing:1px;margin-bottom:var(--sp-xs)">🔍 Sua Pista</p>
+          <p style="font-size:var(--text-lg);color:var(--dark);font-weight:700;line-height:1.5">${hintText}</p>
+        </div>
+        <button class="btn btn-primary" id="btn-next-stage" style="font-size:var(--text-xl)">
+          ${st < 3 ? `Ir para a pista ${st+1} 🗺️` : "Ver minha equipe! 👥"}
+        </button>
+      </div>
+      `}
+    </div>
+  </div>`;
+}
+
+// ── TEAM ─────────────────────────────────────────────────────
+function renderTeam() {
+  const { player } = S;
+  if (!player) return `<div class="loading">⏳ Carregando...</div>`;
+  const tc = TEAM_COLORS[player.team_color] || { bg:"#7C4DFF", emoji:"🎨" };
+
+  return `
+  <div class="screen-top" style="background:linear-gradient(160deg,#FFF7E8 0%,${tc.bg}20 100%)">
+    <div class="container">
+      <div class="bounce-in text-center mb-md">
+        <div style="font-size:var(--icon-xl)">🎨</div>
+        <h1 class="fredoka" style="font-size:var(--text-4xl);color:${tc.bg};line-height:1.15;margin-top:var(--sp-sm)">
+          Você é da Equipe<br>${player.team_color}! ${tc.emoji}
+        </h1>
+      </div>
+
+      <div class="card slide-up mb-md" style="border:3px solid ${tc.bg}">
+        <h3 style="font-weight:800;color:#374151;margin-bottom:var(--sp-sm);font-size:var(--text-base);text-transform:uppercase;letter-spacing:.8px">
+          👥 Sua Equipe
+        </h3>
+        <div id="team-list"><div class="loading" style="padding:var(--sp-md)">⏳ Carregando...</div></div>
+      </div>
+
+      <div class="card-dashed text-center mb-md">
+        <p style="font-size:var(--text-xs);font-weight:700;color:#92400E;text-transform:uppercase;letter-spacing:1px;margin-bottom:var(--sp-xs)">🧩 Sua Peça</p>
+        <p style="font-size:var(--text-3xl);font-weight:900;color:var(--dark)">
+          Peça #${player.puzzle_piece} — Número: ${player.puzzle_number}
+        </p>
+      </div>
+
+      <div class="alert alert-success text-center mb-md">
+        <p style="font-weight:700;font-size:var(--text-lg)">
+          🎯 Encontre sua equipe no ponto de encontro e juntem as peças!
+        </p>
+      </div>
+
+      <button class="btn btn-primary" id="btn-go-final" style="font-size:var(--text-xl)">
+        Temos o quebra-cabeça! 🧩
+      </button>
+    </div>
+  </div>`;
+}
+
+// ── FINAL ────────────────────────────────────────────────────
+function renderFinal() {
+  return `
+  <div class="screen" style="background:linear-gradient(160deg,#FFF7E8 0%,#E0E7FF 100%)">
+    <div class="container">
+      ${S.finalSuccess ? `
+      <div class="card bounce-in text-center" style="border:3px solid #22C55E">
+        <div style="font-size:var(--icon-xl)">🏆</div>
+        <h1 class="fredoka mt-sm" style="font-size:var(--text-4xl);color:#16A34A;line-height:1.2">VOCÊS GANHARAM!</h1>
+        <p style="color:#374151;font-weight:700;font-size:var(--text-xl);margin:var(--sp-md) 0;line-height:1.5">
+          Agora vão buscar o prêmio:
+        </p>
+        <div class="card-dashed mb-md">
+          <p style="font-size:var(--text-xl);color:#92400E;font-weight:800;line-height:1.6">${S.prizeLocation}</p>
+        </div>
+        <div style="font-size:var(--text-3xl);margin:var(--sp-sm) 0">🥚🍫🎉🐰✨</div>
+        <p class="text-muted mt-sm">Feliz Páscoa, equipe incrível! 💛</p>
+      </div>
+      ` : `
+      <div class="text-center mb-md">
+        <div style="font-size:var(--icon-xl)">🔐</div>
+        <h1 class="fredoka mt-sm" style="font-size:var(--text-4xl);color:#7C4DFF">Senha Final!</h1>
+        <p style="color:#6B7280;font-weight:600;margin-top:var(--sp-xs);font-size:var(--text-lg);line-height:1.55">
+          Montaram o quebra-cabeça?<br>
+          Formem a senha com os números das peças!
+        </p>
+      </div>
+      <div class="card" id="final-card">
+        <input class="input input-center" id="inp-password" placeholder="DIGITE A SENHA" />
+        <div id="final-error" class="hidden"></div>
+        <button class="btn btn-primary mt-md" id="btn-check-pw" style="font-size:var(--text-xl)" ${S.loading?"disabled":""}>
+          ${S.loading ? "⏳ Verificando..." : "Revelar o Prêmio! 🎁"}
+        </button>
+      </div>
+      <div class="text-center mt-md">
+        <div style="font-size:var(--icon-md)">🐰</div>
+        <div class="bubble">Uni os números na ordem certa! 🧩</div>
+      </div>
+      `}
+    </div>
+  </div>`;
+}
+
+// ── ADMIN ────────────────────────────────────────────────────
+function renderAdmin() {
+  const { adminPlayers: ps, adminShowTeams: showT, wsOk } = S;
+
+  function getStatus(p) {
+    if (p.bonus_completed_at)  return { label:"Finalizou 🏆",    color:"#22C55E", bg:"#D1FAE5" };
+    if (p.team_revealed_at)    return { label:"Viu equipe 👥",   color:"#7C4DFF", bg:"#EDE9FE" };
+    const cs = p.current_stage || 0;
+    if (cs >= 4) return { label:"Etapa 3 ✅",   color:"#D97706", bg:"#FEF3C7" };
+    if (cs === 3) return { label:"Etapa 3 ⭐",  color:"#D97706", bg:"#FEF3C7" };
+    if (cs === 2) return { label:"Etapa 2 🗺️", color:"#7C4DFF", bg:"#EDE9FE" };
+    if (cs === 1) return { label:"Etapa 1 🥚",  color:"#FF6B9E", bg:"#FDF2F8" };
+    if (p.session_start_at)    return { label:"Logou",           color:"#3B82F6", bg:"#EFF6FF" };
+    if (p.scanned_at)          return { label:"Escaneou 📱",     color:"#6B7280", bg:"#F3F4F6" };
+    return { label:"Aguardando ⚪", color:"#9CA3AF", bg:"#F3F4F6" };
+  }
+
+  function fmtTime(s) {
+    if (!s) return "—";
+    return `${Math.floor(s/60)}m ${s%60}s`;
+  }
+
+  const total    = ps.length;
+  const done     = ps.filter(p => p.bonus_completed_at).length;
+  const playing  = ps.filter(p => p.session_start_at && !p.bonus_completed_at).length;
+  const waiting  = ps.filter(p => !p.session_start_at).length;
+
+  const sorted = [...ps].sort((a,b) => {
+    if (a.bonus_completed_at && !b.bonus_completed_at) return -1;
+    if (!a.bonus_completed_at && b.bonus_completed_at) return 1;
+    return (b.current_stage||0) - (a.current_stage||0);
+  });
+
+  return `
+  <div class="admin-wrap">
+    <div class="admin-inner">
+      <!-- Header -->
+      <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:var(--sp-sm);margin-bottom:var(--sp-lg)">
+        <div>
+          <h1 class="fredoka" style="font-size:var(--text-4xl);color:#FF6B9E">🐰 Dashboard CaçaPáscoa</h1>
+          <span style="font-size:var(--text-sm);font-weight:700;color:${wsOk?"#22C55E":"#EF4444"}">
+            ${wsOk ? "● Tempo real" : "● Reconectando..."}
+          </span>
+        </div>
+        <div style="display:flex;gap:var(--sp-xs);flex-wrap:wrap">
+          <button class="btn btn-secondary" id="btn-toggle-teams" style="width:auto;padding:var(--sp-xs) var(--sp-sm);font-size:var(--text-sm)">
+            ${showT ? "🙈 Ocultar Equipes" : "👁️ Mostrar Equipes"}
+          </button>
+          <button class="btn btn-ghost" id="btn-back-admin" style="width:auto;padding:var(--sp-xs) var(--sp-sm);font-size:var(--text-sm)">
+            ← Sair
+          </button>
+        </div>
+      </div>
+
+      <!-- Stats -->
+      <div class="stats-grid">
+        ${[
+          { icon:"👥", val:total,   label:"Participantes",  color:"#3B82F6" },
+          { icon:"🎮", val:playing,  label:"Jogando",        color:"#FF6B9E" },
+          { icon:"🏆", val:done,     label:"Finalizaram",    color:"#22C55E" },
+          { icon:"⏳", val:waiting,  label:"Aguardam",       color:"#9CA3AF" },
+        ].map(s=>`
+          <div class="stat-card" style="border:2px solid ${s.color}33">
+            <div style="font-size:var(--icon-md)">${s.icon}</div>
+            <div class="fredoka" style="font-size:var(--text-4xl);color:${s.color}">${s.val}</div>
+            <div style="color:#94A3B8;font-size:var(--text-sm);font-weight:700">${s.label}</div>
+          </div>`).join("")}
+      </div>
+
+      <!-- Players grid -->
+      <div class="admin-grid">
+        ${sorted.map(p => {
+          const st = getStatus(p);
+          const tc = TEAM_COLORS[p.team_color] || { bg:"#7C4DFF", emoji:"🎨" };
+          const att = (p.attempts_stage1||0) + (p.attempts_stage2||0) + (p.attempts_stage3||0);
+          return `
+          <div class="admin-card ${p.bonus_completed_at?"finished":""}">
+            <div class="admin-avatar" style="background:${tc.bg}">${p.nome[0]}</div>
+            <div style="flex:1;min-width:0">
+              <div style="font-weight:800;color:#F1F5F9;font-size:var(--text-lg);line-height:1.2">
+                ${p.nome} ${p.sobrenome}
+              </div>
+              ${showT ? `<div style="margin-top:4px"><span class="team-badge" style="background:${tc.bg};font-size:var(--text-xs)">${tc.emoji} ${p.team_color} · Peça #${p.puzzle_piece}</span></div>` : ""}
+              <div style="color:#64748B;font-size:var(--text-xs);margin-top:4px">
+                ${att > 0 ? `${att} tentativa${att!==1?"s":""}` : ""}
+                ${p.total_time_seconds ? ` · ⏱ ${fmtTime(p.total_time_seconds)}` : ""}
+              </div>
+            </div>
+            <span class="tag" style="color:${st.color};background:${st.bg};white-space:nowrap">${st.label}</span>
+          </div>`;
+        }).join("") || `<div style="color:#475569;text-align:center;padding:var(--sp-xl);grid-column:1/-1">Nenhum participante ainda ⏳</div>`}
+      </div>
+
+      <!-- Reset -->
+      <div style="margin-top:var(--sp-xl);padding-top:var(--sp-md);border-top:1px solid #1E293B;text-align:center">
+        <button class="btn btn-danger" id="btn-reset" style="width:auto;padding:var(--sp-xs) var(--sp-md);font-size:var(--text-base)">
+          🔄 Resetar Progresso (Novo Evento)
+        </button>
+        <p style="color:#475569;font-size:var(--text-xs);margin-top:var(--sp-xs)">
+          Apaga apenas o progresso — participantes permanecem cadastrados
+        </p>
+      </div>
+    </div>
+  </div>`;
+}
+
+// ════════════════════════════════════════════════════════════
+//  EVENTOS
+// ════════════════════════════════════════════════════════════
+function bindEvents() {
+  // Start
+  q("btn-start",        "click", () => { S.screen = "login"; render(); });
+
+  // Login
+  q("btn-login",        "click", doLogin);
+  qk("inp-sob",  "Enter", doLogin);
+  qk("inp-nome", "Enter", () => document.getElementById("inp-sob")?.focus());
+
+  // Quiz options
+  document.querySelectorAll(".btn-option").forEach(btn => {
+    btn.addEventListener("click", () => doAnswer(parseInt(btn.dataset.idx)));
+  });
+  q("btn-next-stage", "click", nextStage);
+
+  // Team
+  q("btn-go-final", "click", () => {
+    if (S.player) api("/team-revealed", "POST", { player_id: S.player.id }).catch(()=>{});
+    S.screen = "final"; S.finalSuccess = false; render();
+  });
+
+  // Load team members async
+  if (S.screen === "team" && S.player) loadTeam();
+
+  // Final
+  q("btn-check-pw", "click", doCheckPassword);
+  qk("inp-password", "Enter", doCheckPassword);
+
+  // Admin
+  q("btn-toggle-teams", "click", () => { S.adminShowTeams = !S.adminShowTeams; render(); });
+  q("btn-back-admin",   "click", () => {
+    location.hash = "";
+    S.screen = S.player ? (S.showHint ? "quiz" : "quiz") : "start";
+    render();
+  });
+  q("btn-reset", "click", async () => {
+    if (!confirm("⚠️ Confirma o reset de TODO o progresso?")) return;
+    await api("/admin/reset", "POST", { confirm: "RESETAR" });
+    alert("✅ Progresso resetado!");
+  });
+}
+
+function q(id, ev, fn) {
+  const el = document.getElementById(id);
+  if (el) el.addEventListener(ev, fn);
+}
+function qk(id, key, fn) {
+  const el = document.getElementById(id);
+  if (el) el.addEventListener("keydown", e => e.key === key && fn());
+}
+
+// ════════════════════════════════════════════════════════════
+//  ACTIONS
+// ════════════════════════════════════════════════════════════
+async function doLogin() {
+  const nome = document.getElementById("inp-nome")?.value?.trim();
+  const sob  = document.getElementById("inp-sob")?.value?.trim();
+  if (!nome || !sob) return showLoginErr("Preencha nome e sobrenome! 😊");
+
+  S.loading = true; render();
+
+  const data = await api("/login", "POST", { nome, sobrenome: sob });
+  S.loading = false;
+
+  if (!data.ok) return showLoginErr("Nome não encontrado… confere a escrita! 🤔");
+
+  S.player = data.player;
+  const cs = data.player.current_stage;
+
+  if (data.player.bonus_completed_at) {
+    S.screen = "final"; S.finalSuccess = true;
+  } else if (data.player.team_revealed_at) {
+    S.screen = "final";
+  } else if (cs >= 4) {
+    S.screen = "team";
+  } else {
+    S.quizStage = Math.max(cs, 1);
+    S.screen = "quiz";
+    await loadQuestions(S.quizStage);
+  }
+  render();
+}
+
+function showLoginErr(msg) {
+  const err  = document.getElementById("login-error");
+  const card = document.getElementById("login-card");
+  if (err)  { err.className = "alert alert-error"; err.textContent = msg; }
+  if (card) { card.classList.add("shake"); setTimeout(() => card.classList.remove("shake"), 500); }
+  S.loading = false;
+  // Re-render to remove loading state on button
+  const btn = document.getElementById("btn-login");
+  if (btn) { btn.disabled = false; btn.textContent = "Entrar na Caça 🚀"; }
+}
+
+async function loadQuestions(stage) {
+  const data = await api(`/questions/${stage}`);
+  S.questions  = data.questions || [];
+  S.qIndex     = 0;
+  S.selected   = null;
+  S.showHint   = false;
+}
+
+async function doAnswer(idx) {
+  if (S.selected !== null) return;
+  const q = S.questions[S.qIndex];
+  if (!q) return;
+
+  // Optimistically set selection
+  S.selected = idx;
+  render();
+
+  const data = await api("/answer", "POST", {
+    player_id:   S.player.id,
+    stage:       S.quizStage,
+    question_id: q.id,
+    answer_index: idx,
+  });
+
+  if (data.correct) {
+    // Store correct index on the question object for visual feedback
+    S.questions[S.qIndex]._correct = idx;
+    S.showHint = true;
+    S.hintText = data.hint || "Excelente! Continue! 🎉";
+    if (S.player) S.player[`attempts_stage${S.quizStage}`] = (S.player[`attempts_stage${S.quizStage}`]||0)+1;
+    confetti();
+    render();
+  } else {
+    if (S.player) S.player[`attempts_stage${S.quizStage}`] = (S.player[`attempts_stage${S.quizStage}`]||0)+1;
+    // Short pause then load next question
+    setTimeout(async () => {
+      S.qIndex   = (S.qIndex + 1) % S.questions.length;
+      S.selected = null;
+      render();
+    }, 1500);
+  }
+}
+
+async function nextStage() {
+  if (S.quizStage < 3) {
+    S.quizStage++;
+    S.showHint = false;
+    S.selected = null;
+    await loadQuestions(S.quizStage);
+    render();
+  } else {
+    S.screen   = "team";
+    S.showHint = false;
+    render();
+  }
+}
+
+async function loadTeam() {
+  const data = await api(`/team/${S.player.team_id}`);
+  const container = document.getElementById("team-list");
+  if (!container) return;
+  const tc = TEAM_COLORS[S.player.team_color] || { bg:"#7C4DFF" };
+  container.innerHTML = (data.members || []).map(m => `
+    <div class="member-row" style="background:${m.id===S.player.id ? tc.bg+"18" : "#F9FAFB"};border-color:${m.id===S.player.id ? tc.bg : "transparent"}">
+      <div class="member-avatar" style="background:${tc.bg}">${m.nome[0]}</div>
+      <span style="font-weight:${m.id===S.player.id?800:600};color:${m.id===S.player.id?tc.bg:"#374151"};font-size:var(--text-base);flex:1">
+        ${m.nome} ${m.sobrenome}${m.id===S.player.id?" <strong>(você)</strong>":""}
+      </span>
+      <span style="font-size:var(--text-xs);color:#9CA3AF;font-weight:700">Peça #${m.puzzle_piece}</span>
+    </div>`).join("");
+}
+
+async function doCheckPassword() {
+  const pw = document.getElementById("inp-password")?.value;
+  if (!pw) return;
+  S.loading = true; render();
+
+  const data = await api("/final-password", "POST", {
+    player_id: S.player?.id,
+    password: pw,
+  });
+  S.loading = false;
+
+  if (data.correct) {
+    S.finalSuccess  = true;
+    S.prizeLocation = data.prize;
+    confetti();
+    render();
+  } else {
+    const el   = document.getElementById("final-error");
+    const card = document.getElementById("final-card");
+    if (el)   { el.className = "alert alert-error"; el.textContent = "Confiram a ordem dos números nas peças 🧩"; }
+    if (card) { card.classList.add("shake"); setTimeout(() => card.classList.remove("shake"), 500); }
+    const btn = document.getElementById("btn-check-pw");
+    if (btn)  { btn.disabled = false; btn.textContent = "Revelar o Prêmio! 🎁"; }
+  }
+}
+
+async function loadAdminPlayers() {
+  const data = await api("/admin/players");
+  S.adminPlayers = data.players || [];
+  render();
+}
+
+// ── Boot ─────────────────────────────────────────────────────
+connectWS();
+checkRoute();
+if (S.screen === "start") render();
+</script>
+</body>
+</html>
